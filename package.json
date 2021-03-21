@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.8.3",
     "ant-design": "^1.0.0",
     "antd": "^4.14.0",
+    "axios": "^0.21.1",
     "babel-plugin-import": "^1.13.3",
     "customize-cra": "^1.0.0",
     "less": "^4.1.1",
@@ -42,5 +43,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:8080"
 }

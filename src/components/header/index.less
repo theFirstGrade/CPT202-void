@@ -1,0 +1,60 @@
+.header {
+  display: flex;
+  background-color: #0D8FBF;
+  height: 65px;
+  margin-left: 20px;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  width: calc(100% - 320px); // nice!!!!!calc  yyds
+
+  .header-left {
+    margin-left: 20px;
+    width: 30%;
+
+    .header-search {
+
+      //margin: auto 20px;
+      //width: 30%;
+    }
+  }
+
+  .header-right {
+    margin-right: 30px;
+    width: 70%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .header-right-notification {
+    //margin-right: 10px;
+    font-size: 24px;
+    color: #E0E0E0;
+    border: transparent 3px solid;
+
+  }
+
+
+  .header-right-user {
+    margin-right: 10px;
+    border: #E0E0E0 3px solid;
+    border-radius: 50%;
+    font-size: 24px;
+    color: #E0E0E0;
+
+  }
+
+  .header-right-user:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+  }
+
+  .header-right-notification:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+
+  }
+
+
+}
