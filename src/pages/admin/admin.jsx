@@ -4,6 +4,10 @@ import LeftNav from "../../components/left-nav";
 import Header from "../../components/header";
 import {Redirect, Route, Switch} from "react-router-dom";
 import Home from '../home/home'
+import Application from "../application/application";
+import Inquiry from "../inquiry/inquiry";
+import Manage from "../manage/manage";
+import Receive from "../receive/receive";
 import {WechatOutlined} from '@ant-design/icons'
 
 const {Footer, Sider, Content} = Layout;
@@ -34,6 +38,10 @@ export default class Admin extends React.Component {
                         <Switch>
                             <Redirect from='/' exact to='/home'/>
                             <Route path='/home' component={Home}/>
+                            <Route path='/inquiry' component={Inquiry}/>
+                            <Route path='/manage' component={Manage}/>
+                            <Route path='/receive' component={Receive}/>
+                            <Route path='/application' component={Application}/>
                         </Switch>
                     </Content>
                     <Footer style={{textAlign: 'center', justifyContent: 'center'}}>

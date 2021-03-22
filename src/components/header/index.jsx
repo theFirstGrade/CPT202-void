@@ -13,11 +13,27 @@ import {
 } from '@ant-design/icons';
 
 const {Search} = Input;
+const {confirm} = Modal
 
 /*
 左侧导航的组件
  */
 class Header extends Component {
+
+    logout = () => {
+        Modal.confirm({
+            content: 'are you sure to logout?',
+            onOk: () => {
+                console.log('OK', this)
+                // 跳转到login
+                this.props.history.replace('/login')
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        })
+    }
+
 
     handleSearch = (value) => {
         window.location.href = 'https://www.baidu.com/s?wd=' + value
@@ -64,7 +80,7 @@ class Header extends Component {
                     backgroundColor: '#f01e1e',
                     margin: '0 5px',
                     borderRadius: '5px'
-                }}>
+                }} onClick={this.logout}>
                     <LogoutOutlined/>
                     Log out
                 </Menu.Item>
@@ -83,7 +99,13 @@ class Header extends Component {
                     <Dropdown overlay={menu} placement="bottomCenter" className='header-right-notification'>
                         <BellOutlined/>
                     </Dropdown>
-                    <Divider type="vertical" style={{backgroundColor:'#E0E0E0', height:'25px', margin:'auto 10px',marginRight:'13px',width:'2px'}}/>
+                    <Divider type="vertical" style={{
+                        backgroundColor: '#E0E0E0',
+                        height: '25px',
+                        margin: 'auto 10px',
+                        marginRight: '13px',
+                        width: '2px'
+                    }}/>
                     <Dropdown overlay={menu} placement="bottomCenter" className='header-right-user'>
                         <UserOutlined/>
                     </Dropdown>

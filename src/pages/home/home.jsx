@@ -1,10 +1,15 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import {Carousel, Card} from 'antd'
 import menuList from "../../res/test/menuList";
 import './home.less'
+import {Link} from "react-router-dom";
 
 export default class Header extends Component {
 
+
+    handleClick = (value, key) => {
+        this.props.history.push(key)
+    }
 
     render() {
         const contentStyle = {
@@ -35,8 +40,10 @@ export default class Header extends Component {
             return menuList.map(item => {
                 if (item.title !== 'Home') {
                     return (
-                        <Card title={item.title} bordered={true} className='home-card'>
+                        <Card title={item.title} bordered={true} className='home-card' key={item.key}
+                              onClick={value => this.handleClick(value, item.key)}>
                         </Card>
+
                     )
                 }
             })
