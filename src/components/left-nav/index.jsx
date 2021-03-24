@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 import {Menu, Divider} from 'antd';
 import './index.less'
-import logo from '../../res/images/login-title.png'
+import logo from '../../res/images/logo.png'
 import {AppstoreOutlined, MailOutlined, SettingOutlined, PieChartOutlined} from '@ant-design/icons';
 import menuList from "../../res/test/menuList";
 

@@ -72,7 +72,7 @@ class Header extends Component {
                     profile
                 </Menu.Item>
                 <Menu.Divider style={{backgroundColor: '#BEBEBE'}}/>
-                <Menu.Item key="3" style={{
+                <Menu.Item key="4" style={{
                     height: '45px',
                     lineHeight: '30px',
                     // display: 'flex',

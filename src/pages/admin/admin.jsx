@@ -7,7 +7,7 @@ import Home from '../home/home'
 import Application from "../application/application";
 import Inquiry from "../inquiry/inquiry";
 import Manage from "../manage/manage";
-import Receive from "../receive/receive";
+import MakeOrder from "../makeOrder/makeOrder";
 import {WechatOutlined} from '@ant-design/icons'
 
 const {Footer, Sider, Content} = Layout;
@@ -40,7 +40,7 @@ export default class Admin extends React.Component {
                             <Route path='/home' component={Home}/>
                             <Route path='/inquiry' component={Inquiry}/>
                             <Route path='/manage' component={Manage}/>
-                            <Route path='/receive' component={Receive}/>
+                            <Route path='/makeOrder' component={MakeOrder}/>
                             <Route path='/application' component={Application}/>
                         </Switch>
                     </Content>

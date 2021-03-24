@@ -14,8 +14,8 @@ const menuList = [
         isPublic: true, // 公开的
     },
     {
-        title: 'Inquiry Supplies',
-        key: '/receive',
+        title: 'Make Order',
+        key: '/makeOrder',
         icon: <RiseOutlined/>,
     },
     {
