@@ -1,4 +1,3 @@
-import * as React from "react";
 import {Layout} from 'antd'
 import LeftNav from "../../components/left-nav";
 import Header from "../../components/header";
@@ -9,10 +8,12 @@ import Inquiry from "../inquiry/inquiry";
 import Manage from "../manage/manage";
 import MakeOrder from "../makeOrder/makeOrder";
 import {WechatOutlined} from '@ant-design/icons'
+import React, {Component} from 'react'
+
 
 const {Footer, Sider, Content} = Layout;
 
-export default class Admin extends React.Component {
+export default class Admin extends Component {
 
     render() {
         return (

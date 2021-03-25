@@ -1,25 +1,25 @@
-import React, {Component} from 'react'
+import {Component} from 'react'
 import {Select, Input, Button, Card, Table, Modal, InputNumber, message} from 'antd'
 import {productList} from '../../res/test/productList'
 import {productList2} from '../../res/test/productList2'
 import './makeOrder.less'
 import {reqLogin} from "../../api";
 import MyOrder from "./myOrder";
-import {connect} from 'react-redux'
-import {updateOrder} from '../../redux/actions'
-import {deepClone} from './deepClone'
 
 const {Option} = Select
 const category_list = ['书写用品', '桌面用品', '文件管理用品', '纸质用品', '财务用品', '辅助用品']
 const store_list = ['基础楼（北校区）', '理科楼（北校区）', '中心楼（北校区）', '数学楼（北校区）', '人文和社科楼（南校区）', '新兴科学楼（南校区）', '商学院（南校区）']
-
-class MakeOrder extends Component {
+// const local_number = localStorage.getItem('number')
+// console.log(111, local_number)
+export default class MakeOrder extends Component {
 
     state = {
         searchType: category_list[0],
         searchStore: store_list[0],
         product: productList,
         showStatus: 0,
+        order: [],
+        number: {}
     }
 
     sendOrder = () => {
@@ -27,12 +27,54 @@ class MakeOrder extends Component {
         this.hideOrder()
     }
 
+    componentDidMount() {
 
-    handleOrder = (number, product) => {
-        const order_temp = deepClone(this.props.order)
-        const {name, address, unit} = product
-        order_temp[name] = {'address': address, 'number': number, 'unit': unit}
-        this.props.updateOrder(order_temp)
+    }
+
+    handleOrderFromModal = (number, name) => {
+        const number_temp = this.state.number
+        const order_temp = this.state.order
+
+        // if (number_temp[name]) {
+        number_temp[name] = number
+        // }
+
+        order_temp.map((item => {
+            if (item.name === name) {
+                item.number = number
+            }
+        }))
+
+        this.setState({number: number_temp, order: order_temp})
+    }
+
+
+    handleOrder = (e, product) => {
+        // console.log(product)
+        // console.log(e)
+        const {name, address} = product
+        const order_temp = this.state.order
+        const number_temp = this.state.number
+        let flag = false
+        order_temp.map((item => {
+            if (item.name === name) {
+                item.number = e
+                number_temp[name] = e
+                flag = true
+            }
+        }))
+
+        if (!flag) {
+            order_temp.push({name: name, address: address, number: e, unit: product.unit})
+            number_temp[name] = e
+        }
+
+        this.setState({
+            order: order_temp,
+            number: number_temp
+        }, () => {
+            // console.log(this.state.order)
+        })
     }
 
 
@@ -45,16 +87,34 @@ class MakeOrder extends Component {
     }
 
     getProduct = async () => {
+        localStorage.removeItem('number')
+        // console.log(this.state.number)
+        localStorage.setItem('number', JSON.stringify(this.state.number))
         const result = await reqLogin('11', '111')
         message.success(result.code)
+        const number_temp = JSON.parse(localStorage.getItem('number'))
         this.setState({
             product: this.state.product === productList2 ? productList : productList2,
+            number: number_temp
         }, () => {
             // console.log(this.state.number['hahaha'])
         })
     }
 
+    // componentWillUpdate(){
+    //     const number_temp = JSON.parse(localStorage.getItem('number'))
+    //     if (number_temp) {
+    //         this.setState({number: number_temp},()=>{console.log(this.state.number)})
+    //     }else {
+    //         console.log('number_temp为空')
+    //     }
+    // }
     componentWillMount() {
+        // 此段代码为 刷新之后仍然保存着选择记录
+        // const number_temp = JSON.parse(localStorage.getItem('number'))
+        // if (number_temp) {
+        //     this.setState({number: number_temp})
+        // }
         this.initColumns()
     }
 
@@ -65,8 +125,15 @@ class MakeOrder extends Component {
         });
     };
 
-
     initColumns = () => {
+        // const temp = {}
+        // this.state.product.map((item) => {
+        //     temp[item.name] = 0
+        // })
+        //
+        // this.setState({number: temp}, () => {
+        //     // console.log(this.state.number)
+        // })
 
         this.columns = [
             {
@@ -96,13 +163,10 @@ class MakeOrder extends Component {
                 // dataIndex: 'number',
                 render: (product) => {
                     const {name} = product
-                    // console.log(this.props.order)
+                    console.log(this.state.number)
                     return (
-                        /**
-                         * order:{name1:{address,number,unit},name2:{},name3}
-                         */
                         <InputNumber min={0} max={10}
-                                     value={this.props.order[name] === undefined || null ? 0 : ((this.props.order[name])['number'])}
+                                     value={this.state.number[name] === undefined || null ? 0 : this.state.number[name]}
                                      onChange={(e) => this.handleOrder(e, product)}/>
                     )
                 }
@@ -113,8 +177,7 @@ class MakeOrder extends Component {
 
 
     render() {
-        const {searchType, product, searchStore, showStatus} = this.state
-        const order = this.props.order
+        const {searchType, product, searchStore, showStatus, order} = this.state
         const category = category_list.map((item => {
             {
                 return (
@@ -129,7 +192,6 @@ class MakeOrder extends Component {
             )
         }))
 
-
         const title = (
             <span>
                  <Select
@@ -138,6 +200,8 @@ class MakeOrder extends Component {
                      onChange={value => this.setState({searchType: value})}
                  >
                     {category}
+                     {/*<Option value='productName'>按名称搜索</Option>*/}
+                     {/*<Option value='productDesc'>按描述搜索</Option>*/}
                  </Select>
                  <Select
                      value={searchStore}
@@ -173,16 +237,13 @@ class MakeOrder extends Component {
                         okText='提交'
                         cancelText='返回'
                     >
-                        <MyOrder order={order} column={this.columns}/>
+                        <MyOrder order={order} column={this.columns}
+                                 handleOrderFromModal={this.handleOrderFromModal}
+                        />
                     </Modal>
                 </Card>
             </div>
         );
     }
 }
-
-export default connect(
-    state => ({order: state.order}),
-    {updateOrder}
-)(MakeOrder)
 
