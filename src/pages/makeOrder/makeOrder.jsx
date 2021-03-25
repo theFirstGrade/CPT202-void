@@ -29,10 +29,22 @@ class MakeOrder extends Component {
 
 
     handleOrder = (number, product) => {
-        const order_temp = deepClone(this.props.order)
         const {name, address, unit} = product
-        order_temp[name] = {'address': address, 'number': number, 'unit': unit}
-        this.props.updateOrder(order_temp)
+        if (number === 0) {
+            const order_null = {}
+            for (const item in this.props.order) {
+                if (item === name) {
+
+                } else {
+                    order_null[item] = this.props.order[item]
+                }
+            }
+            this.props.updateOrder(order_null)
+        } else {
+            const order_temp = deepClone(this.props.order)
+            order_temp[name] = {'address': address, 'number': number, 'unit': unit}
+            this.props.updateOrder(order_temp)
+        }
     }
 
 

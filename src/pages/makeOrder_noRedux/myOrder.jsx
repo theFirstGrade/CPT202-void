@@ -1,6 +1,5 @@
 import {Component} from "react";
-import {InputNumber, Table} from "_antd@4.14.0@antd";
-import {message, List, Typography} from "antd";
+import {message, List, Typography, InputNumber, Table} from "antd";
 import './myOrder.less'
 
 export default class MyOrder extends Component {

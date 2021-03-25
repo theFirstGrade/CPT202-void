@@ -1,6 +1,5 @@
 import {Component} from "react";
-import {InputNumber, Table} from "_antd@4.14.0@antd";
-import {message, List, Typography} from "antd";
+import {message, List, Typography, InputNumber, Table} from "antd";
 import './myOrder.less'
 import {connect} from "react-redux";
 import {updateOrder} from "../../redux/actions";
@@ -10,9 +9,21 @@ class MyOrder extends Component {
 
 
     handleOrder = (number, name, address, unit) => {
-        let order_temp = deepClone(this.props.order)
-        order_temp[name] = {'address': address, 'number': number, 'unit': unit}
-        this.props.updateOrder(order_temp)
+        if (number === 0) {
+            const order_null = {}
+            for (const item in this.props.order) {
+                if (item === name) {
+
+                } else {
+                    order_null[item] = this.props.order[item]
+                }
+            }
+            this.props.updateOrder(order_null)
+        } else {
+            let order_temp = deepClone(this.props.order)
+            order_temp[name] = {'address': address, 'number': number, 'unit': unit}
+            this.props.updateOrder(order_temp)
+        }
     }
 
 
