@@ -1,6 +1,6 @@
 import {Component} from 'react'
 
-export default class Inquiry extends Component{
+export default class Inquiry extends Component {
 
     render() {
         return (

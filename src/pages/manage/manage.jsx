@@ -1,6 +1,6 @@
 import {Component} from 'react'
 
-export default class Manage extends Component{
+export default class Manage extends Component {
 
     render() {
         return (

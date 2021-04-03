@@ -4,23 +4,37 @@ import {Form, Input, Button, Checkbox, Switch, message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import logo from './images/login-title.png'
 import {reqLogin} from '../../api/index'
+import {connect} from "react-redux";
+import {login} from "../../redux/actions";
+import {Redirect} from "react-router-dom";
+import storageUtils from "../../utils/storageUtils";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
 
     render() {
-
+        const username = storageUtils.getUserName()
+        const user = this.props.user
+        if (user && user.id) {
+            return <Redirect to='/home'/>
+        }
         const NormalLoginForm = () => {
             const onFinish = async (values) => {
-                console.log('Received values of form: ', values);
-                const result = await reqLogin(values.username, values.password, "POST")
-                if (result.code === 200) {
-                    message.success('登录成功')
-                    this.props.history.replace('/')
-
+                console.log('Received values of form: ', values)
+                this.props.login(values.username, values.password)
+                if (values.remember) {
+                    storageUtils.saveUserName(values.username)
                 } else {
-                    message.error('用户名或密码错误')
+                    storageUtils.removeUserName()
                 }
-                console.log(result)
+                // const result = await reqLogin(values.username, values.password, "POST")
+                // if (result.code === 200) {
+                //     message.success('登录成功')
+                //     this.props.history.replace('/')
+                //
+                // } else {
+                //     message.error('用户名或密码错误')
+                // }
+                // console.log(result)
             };
 
             return (
@@ -29,6 +43,7 @@ export default class Login extends React.Component {
                     className="login-form"
                     initialValues={{
                         remember: true,
+                        username: username
                     }}
                     onFinish={onFinish}
                 >
@@ -94,3 +109,8 @@ export default class Login extends React.Component {
         );
     }
 }
+
+export default connect(
+    state => ({user: state.user}),
+    {login}
+)(Login)

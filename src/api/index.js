@@ -19,3 +19,11 @@ export function reqLogin(username, password) {
 }*/
 export const reqLogin = (username, password) => ajax(BASE + '/login', {username, password}, 'POST')
 
+export const reqProducts = (currentPage) => ajax(BASE + '/depository', {currentPage})
+
+export const reqSearchProducts = ({currentPage, searchCate, searchAddress, searchName}) => ajax(BASE + '/depository/search', {
+    currentPage,
+    searchCate,
+    searchAddress,
+    searchName
+})

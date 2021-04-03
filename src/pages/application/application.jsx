@@ -1,6 +1,6 @@
 import {Component} from 'react'
 
-export default class Application extends Component{
+export default class Application extends Component {
 
     render() {
         return (

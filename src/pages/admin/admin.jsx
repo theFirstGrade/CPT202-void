@@ -9,13 +9,20 @@ import Manage from "../manage/manage";
 import MakeOrder from "../makeOrder/makeOrder";
 import {WechatOutlined} from '@ant-design/icons'
 import React, {Component} from 'react'
+import {connect} from "react-redux";
 
 
 const {Footer, Sider, Content} = Layout;
 
-export default class Admin extends Component {
+class Admin extends Component {
 
     render() {
+        const user = this.props.user
+        // 如果内存没有存储user ==> 当前没有登陆
+        if (!user || !user.id) {
+            // 自动跳转到登陆(在render()中)
+            return <Redirect to='/login'/>
+        }
         return (
             <Layout style={{minHeight: '100%'}}>
                 <Sider width='300px'
@@ -55,5 +62,9 @@ export default class Admin extends Component {
             </Layout>
         );
     }
-
 }
+
+export default connect(
+    state => ({user: state.user}),
+    {}
+)(Admin)

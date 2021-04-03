@@ -13,7 +13,7 @@ export const productList =
                 "detail": "..",
                 "_v": 0,
                 "number": 0,
-                "unit":"1本"
+                "unit": "1本"
             },
             {
                 "status": 1,
@@ -26,7 +26,7 @@ export const productList =
                 "categoryId": "asa",
                 "detail": "..",
                 "_v": 0,
-                "unit":"1本"
+                "unit": "1本"
             },
             {
                 "status": 1,
@@ -39,7 +39,7 @@ export const productList =
                 "categoryId": "asa",
                 "detail": "..",
                 "_v": 0,
-                "unit":"1本"
+                "unit": "1本"
             },
             {
                 "status": 1,
@@ -52,7 +52,7 @@ export const productList =
                 "categoryId": "asa",
                 "detail": "..",
                 "_v": 0,
-                "unit":"1本"
+                "unit": "1本"
             },
             {
                 "status": 1,
@@ -65,7 +65,7 @@ export const productList =
                 "categoryId": "asa",
                 "detail": "..",
                 "_v": 0,
-                "unit":"1本"
+                "unit": "1本"
             },
             {
                 "status": 1,
@@ -78,7 +78,7 @@ export const productList =
                 "categoryId": "asa",
                 "detail": "..",
                 "_v": 0,
-                "unit":"1本"
+                "unit": "1本"
             }
         ]
     )

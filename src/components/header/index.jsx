@@ -11,6 +11,8 @@ import {
     ProfileOutlined,
     BellOutlined
 } from '@ant-design/icons';
+import {connect} from "react-redux";
+import {logout} from "../../redux/actions";
 
 const {Search} = Input;
 const {confirm} = Modal
@@ -26,7 +28,8 @@ class Header extends Component {
             onOk: () => {
                 console.log('OK', this)
                 // 跳转到login
-                this.props.history.replace('/login')
+                // this.props.history.replace('/login')
+                this.props.logout()
             },
             onCancel() {
                 console.log('Cancel');
@@ -117,4 +120,7 @@ class Header extends Component {
 
 }
 
-export default withRouter(Header)
+export default connect(
+    state => ({user: state.user}),
+    {logout}
+)(withRouter(Header))
