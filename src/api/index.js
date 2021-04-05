@@ -21,9 +21,16 @@ export const reqLogin = (username, password) => ajax(BASE + '/login', {username,
 
 export const reqProducts = (currentPage) => ajax(BASE + '/depository', {currentPage})
 
-export const reqSearchProducts = ({currentPage, searchCate, searchAddress, searchName}) => ajax(BASE + '/depository/search', {
+export const reqSearchProducts = ({
+                                      currentPage,
+                                      searchCate,
+                                      searchAddress,
+                                      searchName
+                                  }) => ajax(BASE + '/depository/search', {
     currentPage,
     searchCate,
     searchAddress,
     searchName
 })
+
+export const reqSubmitOrder = (userId, data) => ajax(BASE + '/application', {userId, data}, 'POST')

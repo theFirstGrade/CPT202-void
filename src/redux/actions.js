@@ -7,15 +7,41 @@ import {
     RESET_USER,
     RECEIVE_USER,
     SHOW_ERROR_MSG,
-    UPDATE_ORDER
+    UPDATE_ORDER,
+    SUBMIT_ORDER,
+    SUBMIT_ERROR
 } from './action-types'
 import storageUtils from "../utils/storageUtils";
-import {reqLogin} from "../api";
+import {reqLogin, reqSubmitOrder} from "../api";
+import {message} from "antd";
 
 /*
 更新选中的物品的同步action
  */
 export const updateOrder = (order) => ({type: UPDATE_ORDER, data: order})
+
+export const submitOrder = (userId, order) => {
+    return async dispatch => {
+        const data = []
+        for (const item in order) {
+            data.push({
+                'productName': order[item]['productName'],
+                'productId': order[item]['productId'],
+                'address': order[item]['address'],
+                'number': order[item]['number'],
+                'unit': order[item]['unit']
+            })
+        }
+        console.log(data)
+        const result = await reqSubmitOrder(userId, data)
+        if (result.code === 200) {
+            dispatch(updateOrder({}))
+            message.success('您的申请已提交，请注意查看您的邮件', 6)
+        } else {
+            return {type: SUBMIT_ERROR}
+        }
+    }
+}
 
 /*
 接收用户的同步action

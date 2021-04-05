@@ -8,7 +8,7 @@ import {deepClone} from "./deepClone";
 class MyOrder extends Component {
 
 
-    handleOrder = (number, name, address, unit) => {
+    handleOrder = (number, name, address, unit, id) => {
         if (number === 0) {
             const order_null = {}
             for (const item in this.props.order) {
@@ -21,7 +21,13 @@ class MyOrder extends Component {
             this.props.updateOrder(order_null)
         } else {
             let order_temp = deepClone(this.props.order)
-            order_temp[name] = {'address': address, 'number': number, 'unit': unit}
+            order_temp[name] = {
+                'productId': id,
+                'productName': name,
+                'address': address,
+                'number': number,
+                'unit': unit
+            }
             this.props.updateOrder(order_temp)
         }
     }
@@ -45,7 +51,7 @@ class MyOrder extends Component {
                     <span className='order-list' style={{flex: 1}}>{(order[item])['unit']}</span>
                     <InputNumber className='order-list' style={{flex: 1}} min={0} max={10}
                                  value={(order[item])['number']}
-                                 onChange={(e) => this.handleOrder(e, item, (order[item])['address'], (order[item])['unit'])}/>
+                                 onChange={(e) => this.handleOrder(e, item, (order[item])['address'], (order[item])['unit'], (order[item]['productId']))}/>
                 </div>
             )
         })

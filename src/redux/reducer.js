@@ -10,35 +10,22 @@ import {
     RECEIVE_USER,
     SHOW_ERROR_MSG,
     RESET_USER,
-    UPDATE_ORDER
+    UPDATE_ORDER,
+    SUBMIT_ORDER,
+    SUBMIT_ERROR
 } from './action-types'
 import {message} from "antd";
 import storageUtils from "../utils/storageUtils";
 
 
-/*
-用来管理当前登陆用户的reducer函数
- */
-
-// function user(state = initUser, action) {
-//     switch (action.type) {
-//         case RECEIVE_USER:
-//             return action.user
-//         case SHOW_ERROR_MSG:
-//             const errorMsg = action.errorMsg
-//             // state.errorMsg = errorMsg  // 不要直接修改原本状态数据
-//             return {...state, errorMsg}
-//         case RESET_USER:
-//             return {}
-//         default:
-//             return state
-//     }
-// }
-
 function order(state = {}, action) {
     switch (action.type) {
         case UPDATE_ORDER:
             return action.data
+        case SUBMIT_ERROR:
+            const errorMsg = action.errorMsg
+            message.error(errorMsg)
+            return
         default:
             return state
     }
@@ -46,6 +33,9 @@ function order(state = {}, action) {
 
 const initUser = storageUtils.getUser()
 
+/*
+用来管理当前登陆用户的reducer函数
+ */
 function user(state = initUser, action) {
     switch (action.type) {
         case RECEIVE_USER:
