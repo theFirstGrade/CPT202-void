@@ -14,17 +14,17 @@ const menuList = [
         isPublic: true, // 公开的
     },
     {
-        title: 'Make Order',
+        title: 'Make Application',
         key: '/makeOrder',
         icon: <RiseOutlined/>,
     },
     {
-        title: 'Inventory Inquiry',
+        title: 'Rent',
         key: '/inquiry',
         icon: <SearchOutlined/>
     },
     {
-        title: 'Application for supplies',
+        title: 'handle Application',
         key: '/application',
         icon: <PlusCircleOutlined/>
     },

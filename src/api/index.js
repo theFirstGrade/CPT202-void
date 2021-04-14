@@ -33,4 +33,17 @@ export const reqSearchProducts = ({
     searchName
 })
 
-export const reqSubmitOrder = (userId, data) => ajax(BASE + '/application', {userId, data}, 'POST')
+export const reqSubmitOrder = (userId, email, data) => ajax(BASE + '/application', {userId, email, data}, 'POST')
+
+export const reqApplications = (currentPage) => ajax(BASE + '/getApplication', {currentPage})
+
+export const reqSearchApplications = ({
+                                          currentPage,
+                                          searchAddress,
+                                          verifyCode
+                                      }) => ajax(BASE + '/getApplication/search', {currentPage, searchAddress, verifyCode})
+
+export const reqVerify = ({verifyCode, applicationId}) => ajax(BASE + '/verifyApplication', {
+    verifyCode,
+    applicationId
+}, 'POST')

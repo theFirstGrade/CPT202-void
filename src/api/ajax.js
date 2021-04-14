@@ -30,7 +30,7 @@ export default function ajax(url, data = {}, type = 'GET') {
             // 3. 如果失败了, 不调用reject(reason), 而是提示异常信息
         }).catch(error => {
             // reject(error)
-            message.error('请求出错了: ' + error.message)
+            message.error('很抱歉，服务器出了点小问题，请稍后再试',6)
         })
     })
 

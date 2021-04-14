@@ -38,7 +38,7 @@ class MakeOrder extends Component {
                 cancelText: '返回',
                 onOk: () => {
 
-                    this.props.submitOrder(this.props.user.id, this.props.order) // 提交订单，并将redux中的订单数据清空
+                    this.props.submitOrder(this.props.user.id, this.props.user.email, this.props.order) // 提交订单，并将redux中的订单数据清空
                     this.hideOrder()
                 },
                 onCancel() {
@@ -101,7 +101,7 @@ class MakeOrder extends Component {
             result = await reqProducts(currentPage)
         }
 
-        message.success(result.code)
+        // message.success(result.code)
         if (result.code === 200) {
             const {records, total} = result.data
             this.setState({
@@ -200,7 +200,7 @@ class MakeOrder extends Component {
                  </Select>
                  <Select
                      value={searchAddress}
-                     style={{width: 170, margin: '0 15px'}}
+                     style={{width: 200, margin: '0 15px'}}
                      onChange={value => this.setState({searchAddress: value}, () => this.getProducts(1))}
                  >
                      {store}
@@ -222,7 +222,7 @@ class MakeOrder extends Component {
         return (
             <div>
                 <Card title={title} style={{borderRadius: '0px'}} extra={extra}>
-                    <Table rowKey='_id' dataSource={product} columns={this.columns} bordered loading={false}
+                    <Table rowKey='productId' dataSource={product} columns={this.columns} bordered loading={false}
                            pagination={{
                                current: this.pageNum,
                                total,

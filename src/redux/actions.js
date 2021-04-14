@@ -20,7 +20,7 @@ import {message} from "antd";
  */
 export const updateOrder = (order) => ({type: UPDATE_ORDER, data: order})
 
-export const submitOrder = (userId, order) => {
+export const submitOrder = (userId, email, order) => {
     return async dispatch => {
         const data = []
         for (const item in order) {
@@ -33,7 +33,7 @@ export const submitOrder = (userId, order) => {
             })
         }
         console.log(data)
-        const result = await reqSubmitOrder(userId, data)
+        const result = await reqSubmitOrder(userId, email, data)
         if (result.code === 200) {
             dispatch(updateOrder({}))
             message.success('您的申请已提交，请注意查看您的邮件', 6)
