@@ -9,16 +9,20 @@ import {
     SHOW_ERROR_MSG,
     UPDATE_ORDER,
     SUBMIT_ORDER,
-    SUBMIT_ERROR
+    SUBMIT_ERROR,
+    UPDATE_RENTAL_ORDER,
+    SUBMIT_RENTAL_ERROR
 } from './action-types'
 import storageUtils from "../utils/storageUtils";
-import {reqLogin, reqSubmitOrder} from "../api";
+import {reqLogin, reqSubmitOrder, reqSubmitRentalOrder} from "../api";
 import {message} from "antd";
 
 /*
 更新选中的物品的同步action
  */
 export const updateOrder = (order) => ({type: UPDATE_ORDER, data: order})
+
+export const updateRentalOrder = (orderRental) => ({type: UPDATE_RENTAL_ORDER, data: orderRental})
 
 export const submitOrder = (userId, email, order) => {
     return async dispatch => {
@@ -39,6 +43,34 @@ export const submitOrder = (userId, email, order) => {
             message.success('您的申请已提交，请注意查看您的邮件', 6)
         } else {
             return {type: SUBMIT_ERROR}
+        }
+    }
+}
+
+export const submitRentalOrder = (userId, email, order) => {
+    return async dispatch => {
+        const data = []
+        for (const item in order) {
+            if (order[item]['number'] === 0 || order[item]['days'] === 0){
+                message.warn('请勿将数量或时间设为0')
+                return
+            }
+            data.push({
+                'rentalName': order[item]['rentalName'],
+                'address': order[item]['address'],
+                'number': order[item]['number'],
+                'unit': order[item]['unit'],
+                'days': order[item]['days'],
+                'depositoryId': order[item]['depositoryId']
+            })
+        }
+        console.log(data)
+        const result = await reqSubmitRentalOrder(userId, email, data)
+        if (result.code === 200) {
+            dispatch(updateRentalOrder({}))
+            message.success('您的申请已提交，请注意查看您的邮件', 6)
+        } else {
+            return {type: SUBMIT_RENTAL_ERROR}
         }
     }
 }

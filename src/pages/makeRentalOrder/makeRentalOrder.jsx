@@ -1,21 +1,21 @@
 import React, {Component} from 'react'
 import {Select, Input, Button, Card, Table, Modal, InputNumber, message, Image} from 'antd'
-import {productList} from '../../res/test/productList'
-import {productList2} from '../../res/test/productList2'
-import './makeOrder.less'
-import {reqProducts, reqSearchProducts} from "../../api";
-import MyOrder from "./myOrder";
+import './makeRentalOrder.less'
+import {reqRentalDepository, reqSearchRentalProducts} from "../../api";
+import MyOrder from "./myRentalOrder";
 import {connect} from 'react-redux'
-import {updateOrder, submitOrder} from '../../redux/actions'
+import {updateRentalOrder, submitRentalOrder} from '../../redux/actions'
 import {deepClone} from './deepClone'
 import {PAGE_SIZE} from '../../utils/constants'
 import {category_list, store_list} from '../../utils/constants'
 
 const {Option} = Select
-// const category_list = ['全部', '书写用品', '桌面用品', '文件管理用品', '纸质用品', '财务用品', '辅助用品']
-// const store_list = ['全部', '基础楼（北校区）', '理科楼（北校区）', '中心楼（北校区）', '数学楼（北校区）', '人文和社科楼（南校区）', '新兴科学楼（南校区）', '商学院（南校区）']
+// const category_list2 = ['全部', '书写用品', '桌面用品', '文件管理用品', '纸质用品', '财务用品', '辅助用品']
+// const category_list = ['All', 'Writing supplies', 'Desktop products', 'Document management supplies', 'Paper products', 'Financial supplies']
+// const store_list2 = ['全部', '基础楼（北校区）', '理科楼（北校区）', '中心楼（北校区）', '数学楼（北校区）', '人文和社科楼（南校区）', '新兴科学楼（南校区）', '商学院（南校区）']
+// const store_list = ['All', 'Foundation building (North Campus)', 'Science building (North Campus)', 'Center building (North Campus)', 'Mathematics building (North Campus)', 'Humanities and Social Sciences Building (South Campus)', 'Emerging Science Building (South Campus)','Business school (South Campus)']
 
-class MakeOrder extends Component {
+class MakeRentalOrder extends Component {
 
     state = {
         searchCate: category_list[0],
@@ -29,7 +29,7 @@ class MakeOrder extends Component {
     sendOrder = () => {
         // message.success('您的申请已提交，请注意查看您的邮件', 6)
 
-        if (JSON.stringify(this.props.order) === "{}") { // 将json对象转化为json字符串，再判断该字符串是否为"{}" ！！！！！！
+        if (JSON.stringify(this.props.rentalOrder) === "{}") { // 将json对象转化为json字符串，再判断该字符串是否为"{}" ！！！！！！
             message.info('please select a product')
         } else {
 
@@ -39,8 +39,9 @@ class MakeOrder extends Component {
                 cancelText: 'back',
                 onOk: () => {
 
-                    this.props.submitOrder(this.props.user.id, this.props.user.email, this.props.order) // 提交订单，并将redux中的订单数据清空
+                    this.props.submitRentalOrder(this.props.user.id, this.props.user.email, this.props.rentalOrder) // 提交订单，并将redux中的订单数据清空
                     this.hideOrder()
+
                     setTimeout(
                         () => {
                             this.getProducts(1)
@@ -54,32 +55,61 @@ class MakeOrder extends Component {
     }
 
 
-    handleOrder = (number, product) => {
-        const {productName, address, unit, productId, stock} = product
-        if (number === 0) {
+    handleOrder = (number, product, days) => {
+        const {rentalName, address, unit, depositoryId, stock} = product
+        if (number === 0 && days === 0) {
             const order_null = {}
-            for (const item in this.props.order) {
-                if (parseInt(item) === productId) {
-                    console.log(item)
+            for (const item in this.props.rentalOrder) {
+                if (parseInt(item) === depositoryId) {
+
                 } else {
-                    order_null[item] = this.props.order[item]
+                    order_null[item] = this.props.rentalOrder[item]
                 }
             }
-            this.props.updateOrder(order_null)
+            this.props.updateRentalOrder(order_null)
         } else {
-            const order_temp = deepClone(this.props.order)
-            order_temp[productId] = {
-                'productId': productId,
-                'productName': productName,
+            const order_temp = deepClone(this.props.rentalOrder)
+            order_temp[depositoryId] = {
+                'depositoryId': depositoryId,
+                'rentalName': rentalName,
                 'address': address,
                 'number': number,
                 'unit': unit,
+                'days': days,
                 'stock': stock
             }
-            this.props.updateOrder(order_temp)
+            this.props.updateRentalOrder(order_temp)
         }
     }
 
+    handleRentalDay = (days, product, number) => {
+        const {rentalName, address, unit, depositoryId, stock} = product
+        if (number === 0 && days === 0) {
+            const order_null = {}
+            for (const item in this.props.rentalOrder) {
+                if (parseInt(item) === depositoryId) {
+                    message.warn(days)
+
+                } else {
+                    order_null[item] = this.props.rentalOrder[item]
+                }
+            }
+            this.props.updateRentalOrder(order_null)
+        } else {
+            const order_temp = deepClone(this.props.rentalOrder)
+            order_temp[depositoryId] = {
+                'depositoryId': depositoryId,
+                'rentalName': rentalName,
+                'address': address,
+                'number': number,
+                'unit': unit,
+                'days': days,
+                'stock': stock
+            }
+            this.props.updateRentalOrder(order_temp)
+        }
+
+    }
 
     showOrder = () => {
         this.setState({showStatus: 1})
@@ -103,28 +133,21 @@ class MakeOrder extends Component {
         const {searchCate, searchAddress, searchName} = this.state;
         let result;
         if (searchCate !== '全部' || (searchAddress !== '全部' && searchAddress !== 'All') || searchName !== '') {
-            result = await reqSearchProducts({currentPage, searchCate, searchAddress, searchName})
+            result = await reqSearchRentalProducts({currentPage, searchCate, searchAddress, searchName})
         } else {
-            result = await reqProducts(currentPage)
+            result = await reqRentalDepository(currentPage)
         }
 
         // message.success(result.code)
         if (result.code === 200) {
             const {records, total} = result.data
+            console.log(records)
             this.setState({
                 total,
                 product: records
             })
         }
-        console.log(result)
     }
-
-    handleDelete = (key) => {
-        const dataSource = [...this.state.dataSource];
-        this.setState({
-            dataSource: dataSource.filter((item) => item.key !== key),
-        });
-    };
 
 
     initColumns = () => {
@@ -133,7 +156,7 @@ class MakeOrder extends Component {
             {
                 width: '15%',
                 title: 'product name',
-                dataIndex: 'productName',
+                dataIndex: 'rentalName',
             },
             {
                 width: '10%',
@@ -161,6 +184,7 @@ class MakeOrder extends Component {
                 // render: (price) => '￥' + price
             },
             {
+                width: '10%',
                 title: 'unit',
                 dataIndex: 'unit',
             },
@@ -168,18 +192,32 @@ class MakeOrder extends Component {
                 title: 'Selected quantity',
                 // dataIndex: 'number',
                 render: (product) => {
-                    const {productName, productId} = product
+                    const {depositoryId, stock} = product
+                    const days = this.props.rentalOrder[depositoryId] !== undefined || null ? ((this.props.rentalOrder[depositoryId])['days']) : 0
                     console.log(product)
                     return (
                         /**
                          * order:{name1:{address,number,unit},name2:{},name3}
                          */
-                        <InputNumber min={0} max={product.stock}
-                                     value={(this.props.order[productId] !== undefined || null) ? ((this.props.order[productId])['number']) : 0}
-                                     onChange={(e) => this.handleOrder(e, product)}/>
+                        <InputNumber min={0} max={stock}
+                                     value={(this.props.rentalOrder[depositoryId] !== undefined || null) ? ((this.props.rentalOrder[depositoryId])['number']) : 0}
+                                     onChange={(e) => this.handleOrder(e, product, days)}/>
                     )
                 }
             },
+            {
+                title: 'rental days',
+                render: (product) => {
+                    const {depositoryId} = product
+                    const number = this.props.rentalOrder[depositoryId] !== undefined || null ? ((this.props.rentalOrder[depositoryId])['number']) : 0
+                    return (
+                        <InputNumber min={0} max={30}
+                                     value={(this.props.rentalOrder[depositoryId] !== undefined || null) ? ((this.props.rentalOrder[depositoryId])['days']) : 0}
+                                     onChange={(e) => this.handleRentalDay(e, product, number)}
+                        />
+                    )
+                }
+            }
 
         ]
     }
@@ -187,7 +225,7 @@ class MakeOrder extends Component {
 
     render() {
         const {searchCate, product, searchAddress, showStatus, total} = this.state
-        const order = this.props.order
+        const order = this.props.rentalOrder
         const category = category_list.map((item => {
             {
                 return (
@@ -220,7 +258,7 @@ class MakeOrder extends Component {
                      {store}
                 </Select>
                 <Input
-                    placeholder='key words'
+                    placeholder='关键字'
                     style={{width: 150, marginRight: '15px'}}
                     onChange={event => this.setState({searchName: event.target.value})}
                 />
@@ -236,7 +274,7 @@ class MakeOrder extends Component {
         return (
             <div>
                 <Card title={title} style={{borderRadius: '0px'}} extra={extra}>
-                    <Table rowKey='productId' dataSource={product} columns={this.columns} bordered loading={false}
+                    <Table rowKey='depositoryId' dataSource={product} columns={this.columns} bordered loading={false}
                            pagination={{
                                current: this.pageNum,
                                total,
@@ -261,7 +299,7 @@ class MakeOrder extends Component {
 }
 
 export default connect(
-    state => ({order: state.order, user: state.user}),
-    {updateOrder, submitOrder}
-)(MakeOrder)
+    state => ({rentalOrder: state.rentalOrder, user: state.user}),
+    {updateRentalOrder, submitRentalOrder}
+)(MakeRentalOrder)
 

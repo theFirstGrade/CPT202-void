@@ -14,23 +14,33 @@ const menuList = [
         isPublic: true, // 公开的
     },
     {
-        title: 'Make Application',
+        title: 'Application',
         key: '/makeOrder',
         icon: <RiseOutlined/>,
     },
     {
-        title: 'Rent',
-        key: '/inquiry',
+        title: 'Rent Application',
+        key: '/makeRentalOrder',
         icon: <SearchOutlined/>
     },
     {
-        title: 'handle Application',
+        title: 'Verify Application',
         key: '/application',
         icon: <PlusCircleOutlined/>
     },
     {
-        title: 'Stock Management',
+        title: 'Verify Rental Application',
+        key: '/rentalApplication',
+        icon: <PlusCircleOutlined/>
+    },
+    {
+        title: 'Inventory Management',
         key: '/manage',
+        icon: <SettingOutlined/>,
+    },
+    {
+        title: 'Rental Inventory Management',
+        key: '/rentalManage',
         icon: <SettingOutlined/>,
     },
 

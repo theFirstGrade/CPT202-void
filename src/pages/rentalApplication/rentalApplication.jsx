@@ -2,13 +2,13 @@ import React, {Component} from 'react'
 import {Button, Card, Input, InputNumber, message, Modal, Select, Table} from "antd";
 import {PAGE_SIZE} from "../../utils/constants";
 import MyOrder from "../makeOrder/myOrder";
-import {reqApplications, reqSearchApplications, reqVerify} from "../../api";
+import {reqRentalApplications, reqSearchRentalApplications, reqRentalVerify} from "../../api";
 import {store_list} from '../../utils/constants'
 
 // const store_list = ['全部', '基础楼（北校区）', '理科楼（北校区）', '中心楼（北校区）', '数学楼（北校区）', '人文和社科楼（南校区）', '新兴科学楼（南校区）', '商学院（南校区）']
 const {Option} = Select
 
-export default class Application extends Component {
+export default class RentalApplication extends Component {
     state = {
         searchAddress: store_list[0],
         userId: null,
@@ -31,9 +31,9 @@ export default class Application extends Component {
 
         let result;
         if ((searchAddress !== '全部' && searchAddress !== 'All') || verifyCode) {
-            result = await reqSearchApplications({currentPage, searchAddress, verifyCode})
+            result = await reqSearchRentalApplications({currentPage, searchAddress, verifyCode})
         } else {
-            result = await reqApplications(currentPage)
+            result = await reqRentalApplications(currentPage)
         }
 
         // message.success(result.code)
@@ -59,15 +59,19 @@ export default class Application extends Component {
         this.columns = [
             {
                 title: 'product name',
-                dataIndex: 'productName',
+                dataIndex: 'rentalName',
             },
             {
                 title: 'address',
                 dataIndex: 'address',
             },
             {
-                title: 'quantity ',
+                title: 'quantity',
                 dataIndex: 'number',
+            },
+            {
+                title: 'duration(day)',
+                dataIndex: 'rentalDay'
             },
             {
                 title: 'unit',
@@ -103,7 +107,7 @@ export default class Application extends Component {
             message.warn('please select the product')
             return
         }
-        const result = await reqVerify({verifyCode, applicationId})
+        const result = await reqRentalVerify({verifyCode, applicationId})
         if (result.code === 200) {
             message.success('verify successfully')
             this.setState({verifyCode: null, applicationId: []})

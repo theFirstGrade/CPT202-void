@@ -8,12 +8,12 @@ import {deepClone} from "./deepClone";
 class MyOrder extends Component {
 
 
-    handleOrder = (number, name, address, unit, id) => {
+    handleOrder = (number, id, address, unit, name, stock) => {
         if (number === 0) {
             const order_null = {}
             for (const item in this.props.order) {
-                if (item === name) {
-
+                if (item === id) {
+                    message.warn(item)
                 } else {
                     order_null[item] = this.props.order[item]
                 }
@@ -21,12 +21,14 @@ class MyOrder extends Component {
             this.props.updateOrder(order_null)
         } else {
             let order_temp = deepClone(this.props.order)
-            order_temp[name] = {
+            order_temp[id] = {
                 'productId': id,
                 'productName': name,
                 'address': address,
                 'number': number,
-                'unit': unit
+                'unit': unit,
+                'stock': stock
+
             }
             this.props.updateOrder(order_temp)
         }
@@ -46,12 +48,12 @@ class MyOrder extends Component {
         const orderList = orderListArray.map((item, value) => {
             return (
                 <div key={value} className='order'>
-                    <span className='order-list' style={{flex: 1}}>{item}</span>
+                    <span className='order-list' style={{flex: 1}}>{(order[item])['productName']}</span>
                     <span className='order-list' style={{flex: 2}}>{(order[item])['address']}</span>
                     <span className='order-list' style={{flex: 1}}>{(order[item])['unit']}</span>
-                    <InputNumber className='order-list' style={{flex: 1}} min={0} max={10}
+                    <InputNumber className='order-list' style={{flex: 1}} min={0} max={order[item]['stock']}
                                  value={(order[item])['number']}
-                                 onChange={(e) => this.handleOrder(e, item, (order[item])['address'], (order[item])['unit'], (order[item]['productId']))}/>
+                                 onChange={(e) => this.handleOrder(e, item, (order[item])['address'], (order[item])['unit'], (order[item]['productName']), (order[item]['stock']))}/>
                 </div>
             )
         })

@@ -4,12 +4,14 @@ import Header from "../../components/header";
 import {Redirect, Route, Switch} from "react-router-dom";
 import Home from '../home/home'
 import Application from "../application/application";
-import Inquiry from "../inquiry/inquiry";
-import Manage from "../manage/manage";
 import MakeOrder from "../makeOrder/makeOrder";
+import WareHousing from "../wareHousing/warehousing";
+import MakeRentalOrder from "../makeRentalOrder/makeRentalOrder";
 import {WechatOutlined} from '@ant-design/icons'
 import React, {Component} from 'react'
 import {connect} from "react-redux";
+import Rentalwarehousing from "../rentalwareHousing/rentalwarehousing";
+import RentalApplication from "../rentalApplication/rentalApplication";
 
 
 const {Footer, Sider, Content} = Layout;
@@ -46,17 +48,20 @@ class Admin extends Component {
                         <Switch>
                             <Redirect from='/' exact to='/home'/>
                             <Route path='/home' component={Home}/>
-                            <Route path='/inquiry' component={Inquiry}/>
-                            <Route path='/manage' component={Manage}/>
                             <Route path='/makeOrder' component={MakeOrder}/>
+                            <Route path='/makeRentalOrder' component={MakeRentalOrder}/>
                             <Route path='/application' component={Application}/>
+                            <Route path='/rentalApplication' component={RentalApplication}/>
+                            <Route path='/manage' component={WareHousing}/>
+                            <Route path='/rentalManage' component={Rentalwarehousing}/>
                         </Switch>
                     </Content>
                     <Footer style={{textAlign: 'center', justifyContent: 'center'}}>
                         <span style={{color: '#9D9D9D'}}>本应用所有权归西交利物浦<span
                             style={{color: 'black'}}>&nbsp;void&nbsp;</span>所有</span>
                         <br/>
-                        <span style={{color: '#9D9D9D'}}>联系我们:&nbsp;&nbsp;&nbsp;</span><WechatOutlined/>
+                        <span style={{color: '#9D9D9D'}}>联系我们:&nbsp;&nbsp;&nbsp;</span><WechatOutlined/><span
+                        style={{marginLeft: 5, color: 'grey'}}>chenzhenhaoshuai</span>
                     </Footer>
                 </Layout>
             </Layout>

@@ -11,13 +11,14 @@ const {SubMenu} = Menu;
 /*
 左侧导航的组件
  */
-export default class LeftNav extends Component {
+class LeftNav extends Component {
 
     componentWillMount() {
         this.menuNodes = this.getMenuNodes(menuList)
     }
 
     getMenuNodes = (menuList) => {
+
         return menuList.map(item => {
             if (!item.children) {
                 return (
@@ -48,6 +49,8 @@ export default class LeftNav extends Component {
     }
 
     render() {
+        const path = this.props.location.pathname
+
         return (
             <div className='left-nav'>
                 <img src={logo} alt="logo" className='left-nav-logo'/>
@@ -55,6 +58,7 @@ export default class LeftNav extends Component {
                     className='left-nav-menu'
                     mode="inline"
                     theme="light"
+                    selectedKeys={path}
                     // defaultSelectedKeys='/Home'
                     // defaultOpenKeys={[openKey]}
                 >
@@ -68,5 +72,7 @@ export default class LeftNav extends Component {
         );
     }
 }
+
+export default withRouter(LeftNav)
 
 

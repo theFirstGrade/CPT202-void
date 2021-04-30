@@ -8,3 +8,5 @@ export const RESET_USER = 'reset_user' // 重置用户信息
 export const UPDATE_ORDER = 'update_order' // 更新订单信息
 export const SUBMIT_ORDER = 'submit_order' // 提交订单
 export const SUBMIT_ERROR = 'submit_error'
+export const UPDATE_RENTAL_ORDER = 'update_rental_order'
+export const SUBMIT_RENTAL_ERROR = 'submit_rental_error'

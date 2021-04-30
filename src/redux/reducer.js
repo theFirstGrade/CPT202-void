@@ -12,10 +12,24 @@ import {
     RESET_USER,
     UPDATE_ORDER,
     SUBMIT_ORDER,
-    SUBMIT_ERROR
+    SUBMIT_ERROR, UPDATE_RENTAL_ORDER, SUBMIT_RENTAL_ERROR
 } from './action-types'
 import {message} from "antd";
 import storageUtils from "../utils/storageUtils";
+import {act} from "@testing-library/react";
+
+function rentalOrder(state = {}, action) {
+    switch (action.type) {
+        case UPDATE_RENTAL_ORDER:
+            return action.data
+        case SUBMIT_RENTAL_ERROR:
+            const errorMsg = action.errorMsg
+            message.error(errorMsg)
+            return
+        default:
+            return state
+    }
+}
 
 
 function order(state = {}, action) {
@@ -61,5 +75,5 @@ function user(state = initUser, action) {
   }
  */
 export default combineReducers({
-    order, user
+    order, user, rentalOrder
 })
