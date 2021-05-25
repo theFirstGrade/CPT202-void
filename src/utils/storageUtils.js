@@ -5,6 +5,7 @@ import store from 'store'
 
 const USER_KEY = 'user_key'
 const USER_NAME = 'user_name'
+const TOKEN = 'token'
 export default {
     /*
     保存user
@@ -40,7 +41,7 @@ export default {
     /*
     不保存用户名
      */
-    removeUserName(userName) {
+    removeUserName() {
         store.remove(USER_NAME)
     },
 
@@ -51,4 +52,16 @@ export default {
         // return JSON.parse(localStorage.getItem(USER_KEY) || '{}')
         return store.get(USER_NAME)
     },
+
+    saveToken(token) {
+        store.set(TOKEN, token)
+    },
+
+    removeToken() {
+        store.remove(TOKEN)
+    },
+
+    getToken() {
+        return store.get(TOKEN)
+    }
 }

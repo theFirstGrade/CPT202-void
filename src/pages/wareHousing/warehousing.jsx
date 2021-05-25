@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {Button, Card, Input, Modal, Select, Table, Form, message, Upload, InputNumber, Image} from "antd";
 import {UploadOutlined} from '@ant-design/icons';
-import {Option} from "antd/es/mentions";
+// import {Option} from "antd/es/mentions";
 import {reqDepository, reqAddProduct, reqChangeDepository} from "../../api";
 import {PAGE_SIZE} from "../../utils/constants";
 import {category_list, store_list2, category_list2} from '../../utils/constants'
+
+const {Option} = Select
 
 
 // const store_list = ['基础楼（北校区）', '理科楼（北校区）', '中心楼（北校区）', '数学楼（北校区）', '人文和社科楼（南校区）', '新兴科学楼（南校区）', '商学院（南校区）']
@@ -51,6 +53,7 @@ export default class Warehousing extends Component {
     }
 
     getProducts = async (currentPage) => {
+        this.pageNum = currentPage
         const {searchAddress, searchCate, searchName} = this.state
         let result
         result = await reqDepository({currentPage, searchCate, searchAddress, searchName})
@@ -195,7 +198,7 @@ export default class Warehousing extends Component {
 
         const store = store_list2.map((item => {
             return (
-                <Option value={item}>{item}</Option>
+                <Option key={item} value={item}>{item}</Option>
             )
         }))
 

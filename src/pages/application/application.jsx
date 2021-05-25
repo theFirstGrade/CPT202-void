@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Card, Input, InputNumber, message, Modal, Select, Table} from "antd";
-import {PAGE_SIZE} from "../../utils/constants";
+import {PAGE_SIZE_APPLICATION} from "../../utils/constants";
 import MyOrder from "../makeOrder/myOrder";
 import {reqApplications, reqSearchApplications, reqVerify} from "../../api";
 import {store_list} from '../../utils/constants'
@@ -89,6 +89,7 @@ export default class Application extends Component {
 
     verify = async () => {
         const {verifyCode, applicationId} = this.state
+
         console.log(typeof verifyCode)
         if (!verifyCode || verifyCode.length === 0) {
             message.warn('please enter the verify code')
@@ -103,6 +104,7 @@ export default class Application extends Component {
             message.warn('please select the product')
             return
         }
+
         const result = await reqVerify({verifyCode, applicationId})
         if (result.code === 200) {
             message.success('verify successfully')
@@ -110,6 +112,7 @@ export default class Application extends Component {
         } else {
             message.error('fail to verify！')
         }
+
         this.getApplications(1)
     }
 
@@ -174,7 +177,7 @@ export default class Application extends Component {
                            pagination={{
                                current: this.pageNum,
                                total,
-                               defaultPageSize: PAGE_SIZE,
+                               defaultPageSize: PAGE_SIZE_APPLICATION,
                                onChange: this.getApplications
                            }}/>
                     {/*<Modal*/}

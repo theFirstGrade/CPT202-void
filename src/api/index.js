@@ -17,9 +17,11 @@ const BASE = ''
 export function reqLogin(username, password) {
   return ajax('/login', {username, password}, 'POST')
 }*/
-export const reqLogin = (username, password) => ajax(BASE + '/login', {username, password}, 'POST')
+// export const reqLogin = (username, password) => ajax(BASE + '/login', {username, password}, 'POST')
 
 export const reqProducts = (currentPage) => ajax(BASE + '/depository', {currentPage})
+
+// export const reqPesonalOrders = (userId) => ajax(BASE + '/getPersonalOrders', {userId})
 
 export const reqRentalDepository = (currentPage) => ajax(BASE + '/rentalDepository', {currentPage})
 

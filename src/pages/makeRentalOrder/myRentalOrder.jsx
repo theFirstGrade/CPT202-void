@@ -75,15 +75,15 @@ class MyRentalOrder extends Component {
         const orderList = orderListArray.map((item, value) => {
             return (
                 <div key={value} className='order'>
-                    <span className='order-list' style={{flex: 1}}>{(order[item])['rentalName']}</span>
-                    <span className='order-list' style={{flex: 2}}>{(order[item])['address']}</span>
-                    <span className='order-list' style={{flex: 1}}>{(order[item])['unit']}</span>
-                    <span>数量:&nbsp;</span>
+                    <span className='order-list' style={{flex: 1, marginRight: 15}}>{(order[item])['rentalName']}</span>
+                    <span className='order-list' style={{flex: 2, marginRight: 15}}>{(order[item])['address']}</span>
+                    <span className='order-list' style={{flex: 1, marginRight: 15}}>{(order[item])['unit']}</span>
+                    <span>quantity:&nbsp;</span>
                     <InputNumber className='order-list' style={{flex: 1, marginRight: 15}} min={0}
                                  max={order[item]['stock']}
                                  value={(order[item])['number']}
                                  onChange={(e) => this.handleOrder(e, (order[item])['rentalName'], (order[item])['address'], (order[item])['unit'], (order[item]['depositoryId']), (order[item]['days']), (order[item]['stock']))}/>
-                    <span>时间:&nbsp;</span>
+                    <span>days:&nbsp;</span>
                     <InputNumber className='order-list' style={{flex: 1}} min={0} max={30}
                                  value={(order[item])['days']}
                                  onChange={(e) => this.handleRentalDay(e, (order[item])['rentalName'], (order[item])['address'], (order[item])['unit'], (order[item]['depositoryId']), (order[item]['number']), (order[item]['stock']))}/>

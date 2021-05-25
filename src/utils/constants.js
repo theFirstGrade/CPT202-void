@@ -1,5 +1,5 @@
-export const PAGE_SIZE = 9 // 每页显示的记录数
-
+export const PAGE_SIZE = 5 // 每页显示的记录数
+export const PAGE_SIZE_APPLICATION = 9
 export const category_list = ['All', 'Writing Supplies', 'Desktop Products', 'Document Management Supplies', 'Paper Products', 'Financial Supplies', 'Accessories']
 export const category_list2 = ['Writing Supplies', 'Desktop Products', 'Document Management Supplies', 'Paper Products', 'Financial Supplies', 'Accessories']
 

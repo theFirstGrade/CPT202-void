@@ -16,6 +16,7 @@ import {
 import storageUtils from "../utils/storageUtils";
 import {reqLogin, reqSubmitOrder, reqSubmitRentalOrder} from "../api";
 import {message} from "antd";
+import axios from 'axios'
 
 /*
 更新选中的物品的同步action
@@ -40,7 +41,8 @@ export const submitOrder = (userId, email, order) => {
         const result = await reqSubmitOrder(userId, email, data)
         if (result.code === 200) {
             dispatch(updateOrder({}))
-            message.success('您的申请已提交，请注意查看您的邮件', 6)
+            // message.success('您的申请已提交，请注意查看您的邮件', 6)
+            message.success('submit successfully, please check your email', 6)
         } else {
             return {type: SUBMIT_ERROR}
         }
@@ -51,8 +53,9 @@ export const submitRentalOrder = (userId, email, order) => {
     return async dispatch => {
         const data = []
         for (const item in order) {
-            if (order[item]['number'] === 0 || order[item]['days'] === 0){
-                message.warn('请勿将数量或时间设为0')
+            if (order[item]['number'] === 0 || order[item]['days'] === 0) {
+                // message.warn('请勿将数量或时间设为0')
+                message.warn('the quantity and days cannot be 0')
                 return
             }
             data.push({
@@ -68,7 +71,7 @@ export const submitRentalOrder = (userId, email, order) => {
         const result = await reqSubmitRentalOrder(userId, email, data)
         if (result.code === 200) {
             dispatch(updateRentalOrder({}))
-            message.success('您的申请已提交，请注意查看您的邮件', 6)
+            message.success('submit successfully, please check your email', 6)
         } else {
             return {type: SUBMIT_RENTAL_ERROR}
         }
@@ -94,21 +97,46 @@ export const logout = () => {
 /*
 登陆的异步action
  */
+
 export const login = (username, password) => {
+
     return async dispatch => {
         // 1. 执行异步ajax请求
-        const result = await reqLogin(username, password)  // {status: 0, data: user} {status: 1, msg: 'xxx'}
-        // 2.1. 如果成功, 分发成功的同步action
-        if (result.code === 200) {
-            const user = result.data
-            // 保存local中
-            storageUtils.saveUser(user)
-            // 分发接收用户的同步action
-            dispatch(receiveUser(user))
-        } else { // 2.2. 如果失败, 分发失败的同步action
-            const msg = result.msg
-            // message.error(msg)
-            dispatch(showErrorMsg(msg))
-        }
+        // const result = await reqLogin(username, password)  // {status: 0, data: user} {status: 1, msg: 'xxx'}
+        // // 2.1. 如果成功, 分发成功的同步action
+        // if (result.code === 200) {
+        //     const user = result.data
+        //     // 保存local中
+        //     storageUtils.saveUser(user)
+        //     storageUtils.saveToken()
+        //     // 分发接收用户的同步action
+        //     dispatch(receiveUser(user))
+        // } else { // 2.2. 如果失败, 分发失败的同步action
+        //     const msg = result.msg
+        //     // message.error(msg)
+        //     dispatch(showErrorMsg(msg))
+        // }
+
+        axios.post('/login', {username, password}).then((res) => {
+            if (res.data.code === 200) {
+                console.log(res)
+                const user = res.data.data
+                const token = res.headers.authorization
+                storageUtils.saveUser(user)
+                storageUtils.saveToken(token)
+                dispatch(receiveUser(user))
+                // console.log(res.headers.authorization)
+            } else {
+                const msg = res.data.msg
+                dispatch(showErrorMsg(msg))
+            }
+        })
     }
+    // this.axios.post('http://localhost:8080/login', {username, password}).then
+    // ((res) => {
+    //     console.log(res)
+    //     // const token = res.headers['Authorization']
+    //     // storageUtils.saveToken(token)
+    //     // storageUtils.saveUser(res.data)
+    // })
 }

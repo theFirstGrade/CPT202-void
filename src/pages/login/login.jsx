@@ -43,7 +43,8 @@ class Login extends React.Component {
                     className="login-form"
                     initialValues={{
                         remember: true,
-                        username: username
+                        username: 'admin',
+                        password:'admin'
                     }}
                     onFinish={onFinish}
                 >
@@ -53,7 +54,7 @@ class Login extends React.Component {
                             {
                                 // type: 'email',
                                 required: true,
-                                message: '请输入邮箱',
+                                message: 'please enter your email',
                             },
                         ]}
                     >
@@ -62,14 +63,15 @@ class Login extends React.Component {
                     <Form.Item
                         name="password"
                         rules={[
-                            {required: true, message: '请输入密码'},
-                            {pattern: /^[a-zA-Z0-9_]+$/, message: '密码必须是英文、数字或下划线组成'}
+                            {required: true, message: 'password please'},
+                            // {pattern: /^[a-zA-Z0-9_]+$/, message: '密码必须是英文、数字或下划线组成'}
+                            {pattern: /^[a-zA-Z0-9_]+$/, message: 'the passcode must be English words, integer or "_"'}
                         ]}
                     >
                         <Input
                             prefix={<LockOutlined className="site-form-item-icon"/>}
                             type="password"
-                            placeholder="密码"
+                            placeholder="password"
                         />
 
                     </Form.Item>
@@ -77,14 +79,14 @@ class Login extends React.Component {
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="login-form-button">
-                            登录
+                            login
                         </Button>
                     </Form.Item>
                     <Form.Item className='login-form-remember'>
                         <Form.Item name="remember" valuePropName="checked" className='login-form-remember-switch'>
                             {/*<Switch/>*/}
                             {/*<span style={{fontSize: '.75rem', fontWeight: '400'}}>&nbsp;&nbsp;&nbsp;记住用户名</span>*/}
-                            <Checkbox>记住用户名</Checkbox>
+                            <Checkbox>remember username</Checkbox>
                             {/*<Switch checkedChildren="记住密码" unCheckedChildren="" defaultChecked />*/}
                         </Form.Item>
                     </Form.Item>
@@ -97,10 +99,10 @@ class Login extends React.Component {
             <div className='login'>
                 <header className='login-header'>
                     <img src={logo} alt=""/>
-                    <h1>西浦教资管理系统</h1>
+                    <h1>XJTLU SUPPLIES MANAGEMENT SYSTEM</h1>
                 </header>
                 <section className='login-content'>
-                    <h2>用户登录</h2>
+                    <h2>USER LOGIN</h2>
                     {NormalLoginForm()}
                 </section>
                 <footer>

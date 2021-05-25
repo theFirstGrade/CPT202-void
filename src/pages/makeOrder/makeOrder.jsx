@@ -169,7 +169,7 @@ class MakeOrder extends Component {
                 // dataIndex: 'number',
                 render: (product) => {
                     const {productName, productId} = product
-                    console.log(product)
+                    // console.log(product)
                     return (
                         /**
                          * order:{name1:{address,number,unit},name2:{},name3}

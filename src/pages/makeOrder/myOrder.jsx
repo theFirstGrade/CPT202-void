@@ -48,9 +48,9 @@ class MyOrder extends Component {
         const orderList = orderListArray.map((item, value) => {
             return (
                 <div key={value} className='order'>
-                    <span className='order-list' style={{flex: 1}}>{(order[item])['productName']}</span>
-                    <span className='order-list' style={{flex: 2}}>{(order[item])['address']}</span>
-                    <span className='order-list' style={{flex: 1}}>{(order[item])['unit']}</span>
+                    <span className='order-list' style={{flex: 1, marginRight: 15}}>{(order[item])['productName']}</span>
+                    <span className='order-list' style={{flex: 2, marginRight: 15}}>{(order[item])['address']}</span>
+                    <span className='order-list' style={{flex: 1, marginRight: 15}}>{(order[item])['unit']}</span>
                     <InputNumber className='order-list' style={{flex: 1}} min={0} max={order[item]['stock']}
                                  value={(order[item])['number']}
                                  onChange={(e) => this.handleOrder(e, item, (order[item])['address'], (order[item])['unit'], (order[item]['productName']), (order[item]['stock']))}/>

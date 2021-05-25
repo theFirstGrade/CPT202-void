@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Card, Input, InputNumber, message, Modal, Select, Table} from "antd";
-import {PAGE_SIZE} from "../../utils/constants";
+import {PAGE_SIZE_APPLICATION} from "../../utils/constants";
 import MyOrder from "../makeOrder/myOrder";
 import {reqRentalApplications, reqSearchRentalApplications, reqRentalVerify} from "../../api";
 import {store_list} from '../../utils/constants'
@@ -178,7 +178,7 @@ export default class RentalApplication extends Component {
                            pagination={{
                                current: this.pageNum,
                                total,
-                               defaultPageSize: PAGE_SIZE,
+                               defaultPageSize: PAGE_SIZE_APPLICATION,
                                onChange: this.getApplications
                            }}/>
                     {/*<Modal*/}

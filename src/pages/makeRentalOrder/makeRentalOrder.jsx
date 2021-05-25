@@ -194,7 +194,7 @@ class MakeRentalOrder extends Component {
                 render: (product) => {
                     const {depositoryId, stock} = product
                     const days = this.props.rentalOrder[depositoryId] !== undefined || null ? ((this.props.rentalOrder[depositoryId])['days']) : 0
-                    console.log(product)
+                    // console.log(product)
                     return (
                         /**
                          * order:{name1:{address,number,unit},name2:{},name3}
