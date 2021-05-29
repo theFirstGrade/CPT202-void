@@ -1,8 +1,15 @@
 import React, {Component} from 'react'
-import {Button, Card, Input, InputNumber, message, Modal, Select, Table} from "antd";
+import {Button, Card, Input, InputNumber, message, Radio, Select, Table} from "antd";
 import {PAGE_SIZE_APPLICATION} from "../../utils/constants";
 import MyOrder from "../makeOrder/myOrder";
-import {reqRentalApplications, reqSearchRentalApplications, reqRentalVerify} from "../../api";
+import {
+    reqRentalApplications,
+    reqSearchRentalApplications,
+    reqRentalVerify,
+    reqReturnRentalApplications,
+    reqSearchReturnRentalApplications,
+    reqReturnRentalVerify
+} from "../../api";
 import {store_list} from '../../utils/constants'
 
 // const store_list = ['全部', '基础楼（北校区）', '理科楼（北校区）', '中心楼（北校区）', '数学楼（北校区）', '人文和社科楼（南校区）', '新兴科学楼（南校区）', '商学院（南校区）']
@@ -17,12 +24,14 @@ export default class RentalApplication extends Component {
         applicationId: [],
         showStatus: 0,
         verifyCode: null,
-        focusInput: false
+        focusInput: false,
+        mode: 'receive'
     }
 
     getApplications = async (currentPage) => {
         this.pageNum = currentPage
-        const {searchAddress, verifyCode} = this.state;
+        const {searchAddress, verifyCode, mode, applicationId} = this.state;
+        console.log(applicationId)
         if (verifyCode && isNaN(verifyCode)) {
             // console.log(userId, typeof userId)
             message.warn('verifyCode must be an integer')
@@ -30,10 +39,18 @@ export default class RentalApplication extends Component {
         }
 
         let result;
-        if ((searchAddress !== '全部' && searchAddress !== 'All') || verifyCode) {
-            result = await reqSearchRentalApplications({currentPage, searchAddress, verifyCode})
+        if (mode === 'receive') {
+            if ((searchAddress !== '全部' && searchAddress !== 'All') || verifyCode) {
+                result = await reqSearchRentalApplications({currentPage, searchAddress, verifyCode})
+            } else {
+                result = await reqRentalApplications(currentPage)
+            }
         } else {
-            result = await reqRentalApplications(currentPage)
+            if ((searchAddress !== '全部' && searchAddress !== 'All') || verifyCode) {
+                result = await reqSearchReturnRentalApplications({currentPage, searchAddress, verifyCode})
+            } else {
+                result = await reqReturnRentalApplications(currentPage)
+            }
         }
 
         // message.success(result.code)
@@ -92,7 +109,7 @@ export default class RentalApplication extends Component {
 
 
     verify = async () => {
-        const {verifyCode, applicationId} = this.state
+        const {verifyCode, applicationId, mode} = this.state
         console.log(typeof verifyCode)
         if (!verifyCode || verifyCode.length === 0) {
             message.warn('please enter the verify code')
@@ -107,14 +124,21 @@ export default class RentalApplication extends Component {
             message.warn('please select the product')
             return
         }
-        const result = await reqRentalVerify({verifyCode, applicationId})
+        let result;
+        if (mode === 'receive') {
+            result = await reqRentalVerify({verifyCode, applicationId})
+        } else {
+            result = await reqReturnRentalVerify({verifyCode, applicationId})
+
+        }
         if (result.code === 200) {
             message.success('verify successfully')
             this.setState({verifyCode: null, applicationId: []})
+            this.getApplications(1)
+
         } else {
             message.error('fail to verify！')
         }
-        this.getApplications(1)
     }
 
     render() {
@@ -147,6 +171,15 @@ export default class RentalApplication extends Component {
                     onChange={event => this.setState({verifyCode: event.target.value})}
                 />
                 <Button type='primary' onClick={() => this.getApplications(1)}>search</Button>
+                <Radio.Group defaultValue="receive" style={{marginLeft: 50}} buttonStyle="solid"
+                             onChange={(e) => this.setState({
+                                     mode: e.target.value,
+                                 }, () =>
+                                     this.getApplications(1)
+                             )}>
+                      <Radio.Button value="receive">receive</Radio.Button>
+                      <Radio.Button value="return">return</Radio.Button>
+                </Radio.Group>
             </span>
         )
 
@@ -165,7 +198,7 @@ export default class RentalApplication extends Component {
                 {/*    autoFocus={true}*/}
                 {/*/>*/}
                 <Button type='primary' onClick={this.verify}>
-                    receive
+                    verify
                 </Button>
             </div>
         )

@@ -164,7 +164,7 @@ export default class Application extends Component {
                 {/*    autoFocus={true}*/}
                 {/*/>*/}
                 <Button type='primary' onClick={this.verify}>
-                    receive
+                    verify
                 </Button>
             </div>
         )

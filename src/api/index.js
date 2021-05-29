@@ -72,10 +72,10 @@ export const reqSearchApplications = ({
 })
 
 export const reqSearchRentalApplications = ({
-                                          currentPage,
-                                          searchAddress,
-                                          verifyCode
-                                      }) => ajax(BASE + '/getRentalApplication/search', {
+                                                currentPage,
+                                                searchAddress,
+                                                verifyCode
+                                            }) => ajax(BASE + '/getRentalApplication/search', {
     currentPage,
     searchAddress,
     verifyCode
@@ -90,6 +90,12 @@ export const reqRentalVerify = ({verifyCode, applicationId}) => ajax(BASE + '/ve
     verifyCode,
     applicationId
 }, 'POST')
+
+export const reqReturnRentalVerify = ({verifyCode, applicationId}) => ajax(BASE + '/verifyReturnRentalApplication', {
+    verifyCode,
+    applicationId
+}, 'POST')
+
 
 export const reqRentalProducts = ({
                                       currentPage,
@@ -153,3 +159,54 @@ export const reqChangeDepository = (depositoryId, depositoryStock) => ajax(BASE 
     depositoryStock
 }, 'POST')
 
+export const reqPersonalApplication = ({
+                                           currentPage,
+                                           id,
+                                           searchAddress,
+                                           searchCompleted
+                                       }) => ajax(BASE + '/getPersonalApplication', {
+    currentPage,
+    id,
+    searchAddress,
+    searchCompleted
+})
+
+export const reqPersonalRentalApplication = ({
+                                                 currentPage,
+                                                 id,
+                                                 searchAddress,
+                                                 searchCompleted
+                                             }) => ajax(BASE + '/getPersonalRentalApplication', {
+    currentPage,
+    id,
+    searchAddress,
+    searchCompleted
+})
+
+export const reqCancelApplication = (applicationId) => ajax(BASE + '/cancelApplication', {
+    applicationId
+}, 'POST')
+
+export const reqCancelRentalApplication = (applicationId) => ajax(BASE + '/cancelRentalApplication', {
+    applicationId
+}, 'POST')
+
+export const reqReturnRentalApplications = (currentPage) => ajax(BASE + '/getReturnRentalApplication', {currentPage})
+
+export const reqSearchReturnRentalApplications = ({
+                                                      currentPage,
+                                                      searchAddress,
+                                                      verifyCode
+                                                  }) => ajax(BASE + '/getReturnRentalApplication/search', {
+    currentPage,
+    searchAddress,
+    verifyCode
+})
+
+export const reqRegisterVerifyCode = (email) => ajax(BASE + '/sendVerifyCode', {
+    email
+}, 'POST')
+
+export const reqAddUser = (username, password, email, building, room, verifyCode) => ajax(BASE + '/addUser', {
+    username, password, email, building, room, verifyCode
+}, 'POST')

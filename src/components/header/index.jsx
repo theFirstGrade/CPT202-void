@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {withRouter} from 'react-router-dom'
+import {Redirect, withRouter} from 'react-router-dom'
 import {Input, Space, Modal, Tooltip, Menu, Dropdown, Button, message, Divider} from 'antd';
 import './index.less'
 import LinkButton from "../link-button";
@@ -37,6 +37,10 @@ class Header extends Component {
         })
     }
 
+    jumpPersonalOrder = () => {
+        message.success(123)
+        this.props.history.push('/personalOrder')
+    }
 
     handleSearch = (value) => {
         window.location.href = 'https://www.baidu.com/s?wd=' + value
@@ -52,7 +56,7 @@ class Header extends Component {
                     alignItems: 'center',
                     fontWeight: '800',
                 }} key="1">
-                    ZHENHAO CHEN
+                    {this.props.user.username}
                 </Menu.Item>
                 <Menu.Divider style={{backgroundColor: '#BEBEBE'}}/>
                 <Menu.Item key="2" style={{
@@ -60,9 +64,11 @@ class Header extends Component {
                     margin: '5px',
                     borderRadius: '5px',
                     lineHeight: '30px',
-                }}>
+                }}
+                           onClick={this.jumpPersonalOrder}
+                >
                     <MessageOutlined/>
-                    message
+                    personal orders
                 </Menu.Item>
                 <Menu.Item key="3" style={{
                     height: '40px',

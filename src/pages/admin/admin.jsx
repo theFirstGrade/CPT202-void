@@ -12,7 +12,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux";
 import Rentalwarehousing from "../rentalwareHousing/rentalwarehousing";
 import RentalApplication from "../rentalApplication/rentalApplication";
-
+import PersonalOrder from "../personalOrder/personalOrder"
 
 const {Footer, Sider, Content} = Layout;
 
@@ -54,6 +54,7 @@ class Admin extends Component {
                             <Route path='/rentalApplication' component={RentalApplication}/>
                             <Route path='/manage' component={WareHousing}/>
                             <Route path='/rentalManage' component={Rentalwarehousing}/>
+                            <Route path='/personalOrder' component={PersonalOrder}/>
                         </Switch>
                     </Content>
                     <Footer style={{textAlign: 'center', justifyContent: 'center'}}>

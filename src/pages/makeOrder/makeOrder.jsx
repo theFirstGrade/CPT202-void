@@ -8,7 +8,7 @@ import MyOrder from "./myOrder";
 import {connect} from 'react-redux'
 import {updateOrder, submitOrder} from '../../redux/actions'
 import {deepClone} from './deepClone'
-import {PAGE_SIZE} from '../../utils/constants'
+import {chooseStore, PAGE_SIZE} from '../../utils/constants'
 import {category_list, store_list} from '../../utils/constants'
 
 const {Option} = Select
@@ -225,6 +225,11 @@ class MakeOrder extends Component {
                     onChange={event => this.setState({searchName: event.target.value})}
                 />
                 <Button type='primary' onClick={() => this.getProducts(1)}>search</Button>
+                <span style={{
+                    color: 'grey',
+                    marginLeft: 20
+                }}>{chooseStore(this.props.user.building)}&nbsp;is&nbsp;the&nbsp;closest&nbsp;</span>
+
       </span>
         )
 

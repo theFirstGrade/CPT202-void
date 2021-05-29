@@ -1,17 +1,198 @@
 import * as React from "react";
 import './login.less'
-import {Form, Input, Button, Checkbox, Switch, message} from 'antd';
+import {Form, Input, Button, Checkbox, Col, Select, Modal, Row, message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import logo from './images/login-title.png'
-import {reqLogin} from '../../api/index'
+import {reqAddUser, reqLogin} from '../../api/index'
 import {connect} from "react-redux";
 import {login} from "../../redux/actions";
 import {Redirect} from "react-router-dom";
 import storageUtils from "../../utils/storageUtils";
+import MyOrder from "../makeOrder/myOrder";
+import {reqRegisterVerifyCode} from '../../api/index'
+
+const buildingList = ['foundation building', 'centre building', 'public building']
+const {Option} = Select
 
 class Login extends React.Component {
 
+    state = {
+        show: 0,
+        email: ''
+    }
+
+    getVerifyCode = async () => {
+        const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+        const {email} = this.state
+        if (!reg.test(email)) {
+            return
+        }
+        console.log(email)
+        let result = await reqRegisterVerifyCode(email)
+        if (result.code === 200) {
+            message.success('please check the verify code in your mail box')
+        } else {
+            message.warn('something wrong with the system')
+        }
+    }
+
+
+    hideRegisterForm = () => {
+        this.setState({
+            show: 0
+        })
+    }
+
     render() {
+
+        const options = buildingList.map((item => {
+            return (
+                <Option key={item} value={item}>{item}</Option>
+            )
+        }))
+
+        const layout = {
+            labelCol: {
+                span: 8,
+            },
+            wrapperCol: {
+                span: 12,
+            },
+        };
+        const validateMessages = {
+            required: '${label} is required!',
+            types: {
+                email: '${label} is not a valid email!',
+                number: '${label} is not a valid number!',
+            },
+            number: {
+                range: '${label} must be between ${min} and ${max}',
+            },
+        };
+        /* eslint-enable no-template-curly-in-string */
+
+        const Demo = () => {
+            const onFinish = async (values) => {
+                const {username, password, email, building, room, verifyCode} = values
+                let result = await reqAddUser(username, password, email, building, room, verifyCode)
+                if (result.code === 200) {
+                    message.success('register successfully')
+                } else {
+                    message.error('sorry,there\'s something wrong')
+                }
+                this.setState({show: 0})
+            };
+
+            return (
+                <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}
+                      style={{width: '100%'}} initialValues={{building: buildingList[0]}}>
+                    <Form.Item
+                        name='username'
+                        label="username"
+                        rules={[
+                            {
+                                required: true,
+                            },
+                        ]}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item
+                        name='password'
+                        label="password"
+                        rules={[
+                            {required: true, message: 'password is required!'},
+                            // {pattern: /^[a-zA-Z0-9_]+$/, message: '密码必须是英文、数字或下划线组成'}
+                            {pattern: /^[a-zA-Z0-9_]+$/, message: 'the passcode must be English words, integer or "_"'}
+                        ]}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item
+                        name='passwordCheck'
+                        label="password check"
+                        dependencies={['password']}
+                        rules={[
+                            {required: true, message: 'password is required!'},
+                            // {pattern: /^[a-zA-Z0-9_]+$/, message: '密码必须是英文、数字或下划线组成'}
+                            {pattern: /^[a-zA-Z0-9_]+$/, message: 'the passcode must be English words, integer or "_"'},
+                            ({getFieldValue}) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('password') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item
+                        name='email'
+                        label="email"
+                        rules={[
+                            {
+                                type: 'email',
+                                required: true,
+
+                            },
+                        ]}
+                    >
+                        <Input onChange={(e) => this.setState({email: e.target.value})}/>
+                    </Form.Item>
+                    <Form.Item
+                        name='building'
+                        label="building"
+                        rules={[
+                            {
+                                required: true,
+                            },
+                        ]}
+                    >
+                        <Select>
+                            {options}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        name='room'
+                        label="room"
+                        rules={[
+                            {
+                                required: true,
+                            },
+                        ]}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item label="Captcha" extra="We must make sure that your are a human.">
+                        <Row gutter={8}>
+                            <Col span={12}>
+                                <Form.Item
+                                    name="verifyCode"
+                                    noStyle
+                                    rules={[{required: true, message: 'Please input the captcha you got!'}]}
+
+                                >
+                                    <Input/>
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                <Button
+                                    onClick={this.getVerifyCode}>Get
+                                    captcha</Button>
+                            </Col>
+                        </Row>
+                    </Form.Item>
+                    <Form.Item wrapperCol={{...layout.wrapperCol, offset: 8}}>
+
+                        <Button type="primary" htmlType="submit">
+                            submit
+                        </Button>
+                    </Form.Item>
+                </Form>
+            );
+        };
         const username = storageUtils.getUserName()
         const user = this.props.user
         if (user && user.id) {
@@ -44,7 +225,7 @@ class Login extends React.Component {
                     initialValues={{
                         remember: true,
                         username: 'admin',
-                        password:'admin'
+                        password: 'admin'
                     }}
                     onFinish={onFinish}
                 >
@@ -82,6 +263,12 @@ class Login extends React.Component {
                             login
                         </Button>
                     </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" className="register-form-button"
+                                onClick={() => this.setState({show: 1})}>
+                            Register
+                        </Button>
+                    </Form.Item>
                     <Form.Item className='login-form-remember'>
                         <Form.Item name="remember" valuePropName="checked" className='login-form-remember-switch'>
                             {/*<Switch/>*/}
@@ -94,6 +281,82 @@ class Login extends React.Component {
             );
         };
 
+        const RegisterForm = () => {
+            const onFinish = async (values) => {
+
+                // const result = await reqLogin(values.username, values.password, "POST")
+                // if (result.code === 200) {
+                //     message.success('登录成功')
+                //     this.props.history.replace('/')
+                //
+                // } else {
+                //     message.error('用户名或密码错误')
+                // }
+                // console.log(result)
+            };
+
+            return (
+                <Form
+                    name="normal_login"
+                    className="login-form"
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={onFinish}
+                >
+                    <Form.Item
+                        label='username'
+                        name="username"
+                        rules={[
+                            {
+                                // type: 'email',
+                                required: true,
+                                message: 'please enter your email',
+                            },
+                        ]}
+                    >
+                        <Input placeholder="nick name"/>
+                    </Form.Item>
+                    <Form.Item
+                        label='password'
+                        name="password"
+                        rules={[
+                            {required: true, message: 'password please'},
+                            // {pattern: /^[a-zA-Z0-9_]+$/, message: '密码必须是英文、数字或下划线组成'}
+                            {pattern: /^[a-zA-Z0-9_]+$/, message: 'the passcode must be English words, integer or "_"'}
+                        ]}
+                    >
+                        <Input
+                            type="password"
+                            placeholder="password"
+                        />
+
+                    </Form.Item>
+                    <Form.Item
+                        label='email'
+                        name="email"
+                        rules={[
+                            {required: true, message: 'password please'},
+                            // {pattern: /^[a-zA-Z0-9_]+$/, message: '密码必须是英文、数字或下划线组成'}
+                            {pattern: /^[a-zA-Z0-9_]+$/, message: 'the passcode must be English words, integer or "_"'}
+                        ]}
+                    >
+                        <Input
+                            type="email"
+                            placeholder="email"
+                        />
+
+                    </Form.Item>
+
+
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" className="login-form-button">
+                            login
+                        </Button>
+                    </Form.Item>
+                </Form>
+            );
+        };
 
         return (
             <div className='login'>
@@ -107,6 +370,19 @@ class Login extends React.Component {
                 </section>
                 <footer>
                 </footer>
+                <Modal
+                    title="Register"
+                    visible={this.state.show === 1}
+                    onOk={this.sendOrder}
+                    onCancel={this.hideRegisterForm}
+                    okText='submit'
+                    cancelText='back'
+                >
+                    <div style={{display: 'flex'}}>
+                        {Demo()}
+                    </div>
+                </Modal>
+
             </div>
         );
     }

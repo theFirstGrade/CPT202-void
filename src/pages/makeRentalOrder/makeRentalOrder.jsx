@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {updateRentalOrder, submitRentalOrder} from '../../redux/actions'
 import {deepClone} from './deepClone'
 import {PAGE_SIZE} from '../../utils/constants'
-import {category_list, store_list} from '../../utils/constants'
+import {category_list, store_list, chooseStore} from '../../utils/constants'
 
 const {Option} = Select
 // const category_list2 = ['全部', '书写用品', '桌面用品', '文件管理用品', '纸质用品', '财务用品', '辅助用品']
@@ -258,11 +258,15 @@ class MakeRentalOrder extends Component {
                      {store}
                 </Select>
                 <Input
-                    placeholder='关键字'
+                    placeholder='key words'
                     style={{width: 150, marginRight: '15px'}}
                     onChange={event => this.setState({searchName: event.target.value})}
                 />
                 <Button type='primary' onClick={() => this.getProducts(1)}>search</Button>
+                <span style={{
+                    color: 'grey',
+                    marginLeft: 20
+                }}>{chooseStore(this.props.user.building)}&nbsp;is&nbsp;the&nbsp;closest&nbsp;</span>
       </span>
         )
 
