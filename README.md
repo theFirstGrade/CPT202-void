@@ -1,6 +1,7 @@
 # 西浦教资管理系统
 
 # 如何运行
+#### open this project with IDEA and run 'npm run start' in the terminal.
 
 #### 1.将项目clone到本地，用编译器打开（推荐IDEA），在terminal输入 npm install 并运行（强烈建议先将npm的源切换再执行此命令，详情请看第3条），下载相关依赖
 
